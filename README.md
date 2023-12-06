@@ -1,7 +1,5 @@
 ![img](/hbnb.png)
 
-This repository is one among others at [ALX](https://www.alxafrica.com/)
-
 # About
 
 This repository contains code that tries to implement [AirBnB](https://www.airbnb.com/).
