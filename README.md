@@ -4,6 +4,6 @@
 
 This repository contains code that tries to implement [AirBnB](https://www.airbnb.com/).
 
-It is among the projects required to satisfactorily complete the course at [ALX](https://www.alxafrica.com/)
+It is among the projects required to satisfactorily complete the Software Engineering course at [ALX](https://www.alxafrica.com/)
 
 # Using the Console
