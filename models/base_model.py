@@ -16,13 +16,13 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
 
-        if **kwargs:
+        if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
                     if key in ["created_at", "updated_at"]:
-                        setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S"))
+                        setattr(self, str(key), datetime.fromisoformat(value))
                     else:
-                        setattr(self, key, value)
+                        setattr(self, str(key), value)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
