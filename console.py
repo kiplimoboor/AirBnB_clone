@@ -57,6 +57,54 @@ class HBNBCommand(cmd.Cmd):
             if model:
                 print(model)
 
+    def do_destroy(self, arg):
+        """
+        Usage: destroy BaseModel model-id
+        Deletes an instance based on the class name an id
+        """
+
+        args = arg.split() if arg else [False]
+        if is_valid_class(args[0], len(args) == 2):
+            id = args[1]
+
+            model = find_model(id)
+            if model:
+                del model
+                save_to_file()
+            else:
+                print("** no instance found **")
+
+    def do_all(slef, arg):
+        """
+        Usage: all BaseModel or all
+        Prins all string representation of all instances
+        """
+
+        args = arg.split() if arg else [False]
+        if args and not is_valid_class(args[0]):
+            return
+
+        instances = get_all_instances(args)
+        print(instances)
+
+    def do_update(self, arg):
+        """
+        Usage: update BaseModel model-id attribute value
+        Updates an instance based on the class name and id
+        """
+
+        args = arg.split() if arg else [False]
+        if is_valid_class(args[0], len(args) == 4):
+            id = args[1]
+            attribute_name = args[2]
+            attribute_value = args[3]
+
+            model = find_model(id)
+            if model:
+                setattr(model, attribute_name, eval(attribute_value))
+                model.save()
+            else:
+                print("** no instance found **")
 
 def is_valid_class(arg, id=True):
     """
