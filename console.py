@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """
-This module containes the CLI implementation for the project
+This module contains the CLI implementation for the project
 """
 import cmd
 import json
-import re
 from models.base_model import BaseModel
 
 
@@ -60,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """
         Usage: destroy BaseModel model-id
-        Deletes an instance based on the class name an id
+        Deletes an instance based on the class name and id
         """
 
         args = arg.split() if arg else [False]
@@ -69,15 +68,15 @@ class HBNBCommand(cmd.Cmd):
 
             model = find_model(id)
             if model:
-                del model
+                del self.storage[model.__class__.__name__ + '.' + id]
                 save_to_file()
             else:
                 print("** no instance found **")
 
-    def do_all(slef, arg):
+    def do_all(self, arg):
         """
         Usage: all BaseModel or all
-        Prins all string representation of all instances
+        Prints all string representation of all instances
         """
 
         args = arg.split() if arg else [False]
@@ -85,7 +84,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         instances = get_all_instances(args)
-        print(instances)
+        for instance in instances:
+            print(instances)
 
     def do_update(self, arg):
         """
@@ -99,16 +99,25 @@ class HBNBCommand(cmd.Cmd):
             attribute_name = args[2]
             attribute_value = args[3]
 
+            if len(args) < 4:
+                print("** attribute name missing **")
+                return
+
+            if len(args) < 5:
+                print("** value missing **")
+                return
+
             model = find_model(id)
             if model:
-                setattr(model, attribute_name, eval(attribute_value))
+                setattr(model, attribute_name, attribute_value)
                 model.save()
             else:
                 print("** no instance found **")
 
+
 def is_valid_class(arg, id=True):
     """
-    Checks if class is valid. 
+    Checks if the class is valid.
     id is optional
     """
     if not arg:
@@ -133,11 +142,35 @@ def find_model(id):
         saved_models = json.load(json_file)
         for model in saved_models:
             if model.split('.')[1] == id:
-                return saved_models[str(model)]
-            else:
-                print("** no instance found **")
-                return False
+                return saved_models[model]
+    return None
+
+
+def get_all_instances(args):
+    """
+    Get all instances based on class name or all
+    """
+    filename = "file.json"
+    with open(filename, 'r') as json_file:
+        saved_models = json.load(json_file)
+        instances = [str(saved_models[model]) for model in saved_models
+                     if not args or model.split('.')[0] == args[0]]
+        return instances
+
+
+def save_to_file():
+    """
+    Save instances to the file
+    """
+    filename = "file.json"
+    with open(filename, 'r') as json_file:
+        saved_models = json.load(json_file)
+        # Save instances to the file (implement this part according to your data structure)
+        # saved_models[new_instance.id] = new_instance
+    with open(filename, 'w') as json_file:
+        json.dump(saved_models, json_file)
 
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+
