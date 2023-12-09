@@ -7,6 +7,10 @@ from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """
+    A Place in the app
+    """
+
     city_id = ""
     user_id = ""
     name = ""

@@ -7,4 +7,7 @@ from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
+    """
+    An amenity in the app
+    """
     name = ""
