@@ -6,6 +6,7 @@ import cmd
 import json
 import re
 from models.base_model import BaseModel
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -37,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
         and prints the id.
         """
 
-        if is_valid_class(arg):
+        if is_valid_input(arg):
             new_model = BaseModel()
             new_model.save()
             print(new_model.id)
@@ -50,12 +51,13 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = arg.split() if arg else [False]
-        if is_valid_class(args[0], len(args) == 2):
+        if is_valid_input(args[0], len(args) == 2):
             id = args[1]
 
-            model = find_model(id)
+            saved_models = storage.all()
+            model = find_model(saved_models, id)
             if model:
-                print(model)
+                print(saved_models[model])
 
     def do_destroy(self, arg):
         """
@@ -64,15 +66,15 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = arg.split() if arg else [False]
-        if is_valid_class(args[0], len(args) == 2):
+        if is_valid_input(args[0], len(args) == 2):
             id = args[1]
 
-            model = find_model(id)
+            saved_models = storage.all()
+            model = find_model(saved_models, id)
             if model:
-                del model
-                save_to_file()
-            else:
-                print("** no instance found **")
+                del saved_models[model]
+                storage.save()
+                return
 
     def do_all(slef, arg):
         """
@@ -80,12 +82,16 @@ class HBNBCommand(cmd.Cmd):
         Prins all string representation of all instances
         """
 
-        args = arg.split() if arg else [False]
-        if args and not is_valid_class(args[0]):
-            return
+        saved_models = storage.all()
 
-        instances = get_all_instances(args)
-        print(instances)
+        if arg:
+            if is_valid_input(arg):
+                print(
+                    [f"{str(saved_models[model])}"
+                     for model in saved_models
+                     if saved_models[model]['__class__'] == arg])
+        else:
+            print([f"{str(saved_models[model])}" for model in saved_models])
 
     def do_update(self, arg):
         """
@@ -94,19 +100,21 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = arg.split() if arg else [False]
-        if is_valid_class(args[0], len(args) == 4):
+        if is_valid_input(args[0], len(args) > 1, len(args) > 2, len(args) > 3):
             id = args[1]
-            attribute_name = args[2]
-            attribute_value = args[3]
+            attr = args[2]
+            value = args[3]
 
-            model = find_model(id)
+            saved_models = storage.all()
+
+            model = find_model(saved_models, id)
+
             if model:
-                setattr(model, attribute_name, eval(attribute_value))
-                model.save()
-            else:
-                print("** no instance found **")
+                saved_models[model][attr] = value
+                storage.save()
 
-def is_valid_class(arg, id=True):
+
+def is_valid_input(arg, id=True, attribute=True, value=True):
     """
     Checks if class is valid. 
     id is optional
@@ -120,23 +128,23 @@ def is_valid_class(arg, id=True):
     if not id:
         print(" ** instance id missing **")
         return False
+    if not attribute:
+        print("** attribute name missing **")
+        return False
+    if not value:
+        print("value missing")
+        return False
 
     return True
 
 
-def find_model(id):
-    """
-    Find stored models based on id
-    """
-    filename = "file.json"
-    with open(filename, 'r') as json_file:
-        saved_models = json.load(json_file)
-        for model in saved_models:
-            if model.split('.')[1] == id:
-                return saved_models[str(model)]
-            else:
-                print("** no instance found **")
-                return False
+def find_model(models, id):
+    for model in models:
+        if model.split('.')[1] == id:
+            return model
+
+    print("** no instance found **")
+    return False
 
 
 if __name__ == '__main__':
