@@ -5,6 +5,8 @@ to a JSON file and deserializes JSON file to instances
 """
 
 import json
+from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -22,14 +24,14 @@ class FileStorage:
         """
         sets in __objects the obj with key <obj class name>.id
         """
-        key = f"{obj['__class__']}.{obj['id']}"
+        key = f"{obj.__class__.__name__'}.{obj.id}"
         self.__objects[key] = obj
 
     def save(self):
         """
         serializes __objects to the JSON file (path: __file_path)
         """
-        filename = self.__file_path
+        filename = slef.__file_path
         with open(filename, 'w') as json_file:
             json.dump(self.__objects, json_file)
 
@@ -42,4 +44,4 @@ class FileStorage:
             with open(filename, 'r') as json_file:
                 self.__objects = json.load(json_file)
         except FileNotFoundError:
-            pass
+            return
