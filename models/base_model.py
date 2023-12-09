@@ -22,15 +22,15 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Initializes a new BaseModel"""
 
+        time_format = "%Y-%m-%dT%H:%M:%S.%f"
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        if kwargs:
+        if len(kwargs) != 0:
             for key, value in kwargs.items():
-                if key != '__class__':
-                    if key in ["created_at", "updated_at"]:
-                        setattr(self, str(key), datetime.fromisoformat(value))
-                    else:
+                if key in ["created_at", "updated_at"]:
+                        setattr(self, str(key), datetime.strptime(value, time_format))
+                else:
                         setattr(self, str(key), value)
         else:
             storage.new(self.to_dict())
