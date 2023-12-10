@@ -4,6 +4,7 @@ This module containes the CLI implementation for the project
 """
 import cmd
 import json
+import re
 from datetime import datetime
 from models import storage
 from models.base_model import BaseModel
@@ -103,25 +104,25 @@ class HBNBCommand(cmd.Cmd):
         else:
             print([f"{to_str(saved_models[model])}" for model in saved_models])
 
-    def do_update(self, arg):
+    def do_update(self, arg: str):
         """
         Usage: update BaseModel model-id attribute value
         Updates an instance based on the class name and id
         """
 
-        args = arg.split() if arg else [False]
+        args = arg.split(maxsplit=3) if arg else [False]
         if is_valid_input(args[0], len(args) > 1,
                           len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
-            value = args[3]
+            value = re.findall(r"^[\"\'](.*?)[\"\']", args[3])[0]
 
+            print(value)
             saved_models = storage.all()
 
             model = find_model(saved_models, id)
 
             if model:
-                value = ''.join(x for x in value if x != '"')
                 saved_models[model][attr] = value
                 storage.save()
 
