@@ -124,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
                           len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
-            value = re.findall(r"^[\"\'](.*?)[\"\']", args[3])[0]
+            value = args[3].strip('\"')
 
             saved_models = storage.all()
 

@@ -5,6 +5,7 @@ to a JSON file and deserializes JSON file to instances
 """
 
 
+import os
 import json
 from models.base_model import BaseModel
 from models.amenity import Amenity
@@ -46,8 +47,8 @@ class FileStorage:
 
         filename = self.__file_path
         with open(filename, 'w') as json_file:
-            json.dump({k: v.to_dict()
-                       for k, v in self.__objects.items()}, json_file)
+            json.dump({key: value.to_dict()
+                       for key, value in self.__objects.items()}, json_file)
 
     def reload(self):
         """
@@ -56,12 +57,17 @@ class FileStorage:
         classes = {'Amenity': Amenity, 'BaseModel': BaseModel, 'City': City,
                    'Place': Place, 'Review': Review, 'State': State,
                    'User': User}
-        try:
-            filename = self.__file_path
-            with open(filename, 'r') as json_file:
+        filename = self.__file_path
+        if not os.path.exists(filename):
+            return
+        with open(filename, 'r') as json_file:
+            try:
                 models = json.load(json_file)
+            except json.JSONDecodeError:
+                pass
 
-                self.__objects = {key: classes[key.split('.')[0]](**value)
-                                  for key, value in models.items()}
-        except FileNotFoundError:
-            pass
+            if models is None:
+                return
+
+            self.__objects = {key: classes[key.split('.')[0]](**value)
+                              for key, value in models.items()}
