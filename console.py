@@ -4,15 +4,17 @@ This module containes the CLI implementation for the project
 """
 import cmd
 import json
-import re
-from models.base_model import BaseModel
+from datetime import datetime
 from models import storage
-from models.user import User
-from models.city import City
-from models.state import State
+from models.base_model import BaseModel
 from models.amenity import Amenity
+from models.city import City
 from models.place import Place
 from models.review import Review
+from models.state import State
+from models.user import User
+
+classes = ['Amenity', 'BaseModel', 'City', 'Place', 'Review', 'State', 'User']
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,15 +23,6 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
-    __classes = {
-        "BaseModel",
-        "User"
-        "City"
-        "State"
-        "Amenity"
-        "Place"
-        "Review"
-   }
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
@@ -57,6 +50,7 @@ class HBNBCommand(cmd.Cmd):
             new_model = BaseModel()
             new_model.save()
             print(new_model.id)
+            storage.reload()
 
     def do_show(self, arg):
         """
@@ -72,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
             saved_models = storage.all()
             model = find_model(saved_models, id)
             if model:
-                print(BaseModel(**saved_models[model]))
+                print(saved_models[model])
 
     def do_destroy(self, arg):
         """
@@ -89,7 +83,6 @@ class HBNBCommand(cmd.Cmd):
             if model:
                 del saved_models[model]
                 storage.save()
-                return
 
     def do_all(slef, arg):
         """
@@ -102,11 +95,9 @@ class HBNBCommand(cmd.Cmd):
         if arg:
             if is_valid_input(arg):
                 print(
-                    [f"{to_str(saved_models[model])}"
-                     for model in saved_models
-                     if saved_models[model]['__class__'] == arg])
+                    [f"{saved_models[model]}" for model in saved_models if saved_models[model].__class__.__name__ == arg])
         else:
-            print([f"{to_str(saved_models[model])}" for model in saved_models])
+            print([f"{saved_models[model]}" for model in saved_models])
 
     def do_update(self, arg):
         """
@@ -126,7 +117,12 @@ class HBNBCommand(cmd.Cmd):
 
             if model:
                 value = ''.join(x for x in value if x != '"')
-                saved_models[model][attr] = value
+                setattr(saved_models[model], attr, value)
+                updated = saved_models[model]
+                del saved_models[model]
+                storage.save()
+
+                storage.new(updated.to_dict())
                 storage.save()
 
 
@@ -138,7 +134,7 @@ def is_valid_input(arg, id=True, attribute=True, value=True):
     if not arg:
         print("** class name missing **")
         return False
-    if arg != 'BaseModel':
+    if arg not in classes:
         print("** class doesn't exist **")
         return False
     if not id:
@@ -161,11 +157,6 @@ def find_model(models, id):
 
     print("** no instance found **")
     return False
-
-
-def to_str(model):
-    if model['__class__'] == "BaseModel":
-        return BaseModel(**model)
 
 
 if __name__ == '__main__':
