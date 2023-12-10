@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """
-Module for place
+This Module defines the class for place
 """
+
 
 from models.base_model import BaseModel
 

@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 """
-This module containes the CLI implementation for the project
+This module containes the CLI implementation for the project.
+It contains the entry pooint of the command intepreter.
+The module defines a class HBNBCommand that interpretes commands given to it.
 """
+
+
 import cmd
 import json
 import re
@@ -15,6 +19,7 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
+
 classes = {'Amenity': Amenity, 'BaseModel': BaseModel, 'City': City,
            'Place': Place, 'Review': Review, 'State': State,
            'User': User}
@@ -22,7 +27,11 @@ classes = {'Amenity': Amenity, 'BaseModel': BaseModel, 'City': City,
 
 class HBNBCommand(cmd.Cmd):
     """
-    Class to run the cmd implementation
+    This class defines the HBNB command interpreter.
+    Properties:
+      prompt: (HBNB)
+      it contains different methods used in controlling the
+      command interpreter
     """
 
     prompt = "(hbnb) "
@@ -151,6 +160,9 @@ def is_valid_input(arg, id=True, attribute=True, value=True):
 
 
 def find_model(models, id):
+    """
+    Find and return a model instance based on given ID
+    """
     for model in models:
         if model.split('.')[1] == id:
             return model

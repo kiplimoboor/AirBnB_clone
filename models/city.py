@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 """
-Module for city
+This module defines the class `ifor city
 """
+
 
 from models.base_model import BaseModel
 
@@ -14,5 +15,6 @@ class City(BaseModel):
     Args:
         BaseModel: The parent class
     """
+
     state_id = ""
     name = ""
