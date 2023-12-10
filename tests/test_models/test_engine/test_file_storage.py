@@ -5,6 +5,7 @@ This module contains tests for the `file_storage` module
 import os
 import unittest
 from models import storage
+from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
@@ -24,5 +25,6 @@ class TestFileStorage(unittest.TestCase):
             os.remove(filename)
 
     def test_all(self):
-        storage.reload()
-        self.assertEqual(dict, type(storage.all()))
+        b = BaseModel()
+        storage.new(b)
+        self.assertIn(f"BaseModel.{b.id}", storage.all().keys())
