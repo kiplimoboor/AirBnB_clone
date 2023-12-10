@@ -1,7 +1,13 @@
 #!/usr/bin/python3
 """
-This module defines a class Basemodel that defines all common attributes
- and methods from other classes
+Defines the Basemodel class with common attributes and
+methods from other classes
+
+@Attributes:
+  id: assings a unique uuid to id
+  created_at: assigns the current datetime when an instance is created
+  upddated_at: assigns the current datetime every time an instance is updated
+  
 """
 
 
