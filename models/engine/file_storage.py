@@ -5,7 +5,6 @@ to a JSON file and deserializes JSON file to instances
 """
 
 
-import os
 import json
 from models.base_model import BaseModel
 from models.amenity import Amenity
@@ -58,16 +57,13 @@ class FileStorage:
                    'Place': Place, 'Review': Review, 'State': State,
                    'User': User}
         filename = self.__file_path
-        if not os.path.exists(filename):
-            return
-        with open(filename, 'r') as json_file:
-            try:
+
+        try:
+            with open(filename, 'r') as json_file:
                 models = json.load(json_file)
-            except json.JSONDecodeError:
-                pass
-
-            if models is None:
-                return
-
-            self.__objects = {key: classes[key.split('.')[0]](**value)
-                              for key, value in models.items()}
+                self.__objects = {key: classes[key.split('.')[0]](**value)
+                                  for key, value in models.items()}
+        except FileNotFoundError:
+            pass
+        except json.JSONDecodeError:
+            pass
