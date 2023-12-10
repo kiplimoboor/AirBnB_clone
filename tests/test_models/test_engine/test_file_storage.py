@@ -5,6 +5,7 @@ This module contains tests for the `file_storage` module
 import os
 import json
 import unittest
+import models
 from models import storage
 from models.base_model import BaseModel
 
@@ -42,19 +43,34 @@ class TestFileStorage(unittest.TestCase):
             self.assertIn(f"BaseModel.{b.id}", objects)
 
     def test_reload(self):
-        b1 = BaseModel()
-        b1.save()
-        storage.reload()
+        bm = BaseModel()
+        us = User()
+        st = State()
+        pl = Place()
+        cy = City()
+        am = Amenity()
+        rv = Review()
+        models.storage.new(bm)
+        models.storage.new(us)
+        models.storage.new(st)
+        models.storage.new(pl)
+        models.storage.new(cy)
+        models.storage.new(am)
+        models.storage.new(rv)
+        models.storage.save()
+        models.storage.reload()
+        objs = FileStorage._FileStorage__objects
+        self.assertIn("BaseModel." + bm.id, objs)
+        self.assertIn("User." + us.id, objs)
+        self.assertIn("State." + st.id, objs)
+        self.assertIn("Place." + pl.id, objs)
+        self.assertIn("City." + cy.id, objs)
+        self.assertIn("Amenity." + am.id, objs)
+        self.assertIn("Review." + rv.id, objs)
 
-        with open(filename, 'r') as json_file:
-            objects = json.load(json_file)
-            self.assertIn(f"BaseModel.{b1.id}", objects)
-
-        b2 = BaseModel()
-        storage.reload()
-        with open(filename, 'r') as json_file:
-            objects = json.load(json_file)
-            self.assertNotIn(f"BaseModel.{b2.id}", objects)
+    def test_reload_with_arg(self):
+        with self.assertRaises(TypeError):
+            models.storage.reload(None)
 
 
 if __name__ == "__main__":
