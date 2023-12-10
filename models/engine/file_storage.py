@@ -30,7 +30,7 @@ class FileStorage:
         sets in __objects the obj with key <obj class name>.id
         """
 
-        key = f"{obj['__class__']}.{obj['id']}"
+        key = f"{type(obj).__name__}.{obj.id}"
         self.__objects[key] = obj
 
     def save(self):
@@ -40,7 +40,8 @@ class FileStorage:
 
         filename = self.__file_path
         with open(filename, 'w') as json_file:
-            json.dump(self.__objects, json_file)
+            json.dump({k: v.to_dict()
+                       for k, v in self.__objects.items()}, json_file)
 
     def reload(self):
         """
@@ -52,6 +53,9 @@ class FileStorage:
         try:
             filename = self.__file_path
             with open(filename, 'r') as json_file:
-                self.__objects = json.load(json_file)
+                models = json.load(json_file)
+
+                self.__objects = {key: classes[key.split('.')[0]](**value)
+                                  for key, value in models.items()}
         except FileNotFoundError:
             pass

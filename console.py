@@ -69,7 +69,7 @@ class HBNBCommand(cmd.Cmd):
             saved_models = storage.all()
             model = find_model(saved_models, id)
             if model:
-                print(to_str(saved_models[model]))
+                print(saved_models[model])
 
     def do_destroy(self, arg):
         """
@@ -98,11 +98,11 @@ class HBNBCommand(cmd.Cmd):
         if arg:
             if is_valid_input(arg):
                 print(
-                    [f"{to_str(saved_models[model])}"
+                    [f"{saved_models[model]}"
                      for model in saved_models
-                     if saved_models[model]['__class__'] == arg])
+                     if type(saved_models[model]).__name__ == arg])
         else:
-            print([f"{to_str(saved_models[model])}" for model in saved_models])
+            print([f"{saved_models[model]}" for model in saved_models])
 
     def do_update(self, arg: str):
         """
@@ -117,13 +117,12 @@ class HBNBCommand(cmd.Cmd):
             attr = args[2]
             value = re.findall(r"^[\"\'](.*?)[\"\']", args[3])[0]
 
-            print(value)
             saved_models = storage.all()
 
             model = find_model(saved_models, id)
 
             if model:
-                saved_models[model][attr] = value
+                setattr(saved_models[model], attr, value)
                 storage.save()
 
 
@@ -158,10 +157,6 @@ def find_model(models, id):
 
     print("** no instance found **")
     return False
-
-
-def to_str(obj):
-    return str(classes[obj['__class__']](**obj))
 
 
 if __name__ == '__main__':
