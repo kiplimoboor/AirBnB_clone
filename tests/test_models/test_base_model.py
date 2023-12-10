@@ -24,3 +24,8 @@ class TestBase(unittest.TestCase):
         b1.number = 89
         self.assertEqual(b1.name, "Base")
         self.assertEqual(b1.number, 89)
+
+    def test_str(self):
+        b1 = BaseModel()
+        b1_str = f"[{type(b1).__name__}] ({b1.id}) {b1.__dict__}"
+        self.assertEqual(str(b1), b1_str)
