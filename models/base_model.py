@@ -6,12 +6,14 @@ methods from other classes
 @Attributes:
   id: assings a unique uuid to id
   created_at: assigns the current datetime when an instance is created
-  upddated_at: assigns the current datetime every time an instance is updated
+  updated_at: assigns the current datetime every time an instance is updated
+
+@Methods:
+  def save: updates the public instance attribute updated_at
+  def to_dict: returns a dictionaary containing keys/values of __dict__ 
 """
-
-
 import models
-import uuid
+from uuid import uuid4
 from datetime import datetime
 
 
