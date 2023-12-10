@@ -34,6 +34,7 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save(self):
         b = BaseModel()
+        self.assertFalse(os.path.exists(filename))
         b.save()
         self.assertTrue(os.path.exists(filename))
 
