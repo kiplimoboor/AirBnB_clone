@@ -12,15 +12,12 @@ from datetime import datetime
 class BaseModel:
     """
     This is the base model of the airbnb clone project.
-
-    Properties:
-        *args: not used
-        **kwargs: key/value pairs of attributes
     """
 
     def __init__(self, *args, **kwargs):
-        """Initializes a new BaseModel"""
-
+        """
+        Initializes the BaseModel
+        """
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
@@ -36,22 +33,27 @@ class BaseModel:
 
     def __str__(self):
         """
-        Returns the string representation of the instance
+        Creates string representation of BaseModel
+
+        Returns:
+            string: the formatted string representation
         """
 
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """
-        Updates the public instance attribute updated_at with current datetime
+        Saves the model
         """
 
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
-        """
-        Returns a dictionary containing all keys/values of the instance
+        """Finds dictionary representaion of mode
+
+        Returns:
+            dict: the doctionary respresentation of the model
         """
         dictionary = self.__dict__.copy()
         dictionary['__class__'] = self.__class__.__name__
