@@ -3,6 +3,7 @@ This is a test module for the base_model module
 """
 
 import unittest
+import time
 from datetime import datetime
 from models.base_model import BaseModel
 
@@ -29,3 +30,22 @@ class TestBase(unittest.TestCase):
         b1 = BaseModel()
         b1_str = f"[{type(b1).__name__}] ({b1.id}) {b1.__dict__}"
         self.assertEqual(str(b1), b1_str)
+
+    def test_save(self):
+        b1 = BaseModel()
+        update_at_create = b1.updated_at
+        b1.name = "My First Model"
+        b1.my_number = 89
+        b1.save()
+        update_at_save = b1.updated_at
+        self.assertNotEqual(update_at_create, update_at_save)
+
+    def test_to_dict(self):
+        b = BaseModel()
+        b_dict = b.to_dict()
+
+        self.assertIsInstance(b_dict, dict)
+        self.assertEqual(b_dict['__class__'], type(b).__name__)
+        self.assertIn('id', b_dict.keys())
+        self.assertIn('created_at', b_dict.keys())
+        self.assertIn('updated_at', b_dict.keys())
