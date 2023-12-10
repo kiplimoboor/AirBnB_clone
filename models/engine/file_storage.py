@@ -19,6 +19,15 @@ class FileStorage:
     """
     This class defines a filestorage for all the files in the
     hbnb project
+    @Attributes
+      __file_path: path to the json file
+      __objects: empty but will store all objects
+
+    @Methods:
+      def all: returns the dictionary __objects
+      def new: sets in __objects the obj with key
+      def save: serializes __objects to the json file
+      def reload: deserializes the json file to __objects
     """
 
     __file_path = "file.json"
