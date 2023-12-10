@@ -38,6 +38,13 @@ class TestFileStorage(unittest.TestCase):
         b.save()
         self.assertTrue(os.path.exists(filename))
 
+    def test_reload(self):
+        b = BaseModel()
+        b.save()
+        storage.reload()
+        objects = storage.all()
+        self.assertIn(f"BaseModel.{b.id}", storage.all().keys())
+
 
 if __name__ == "__main__":
     unittest.main()
