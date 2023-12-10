@@ -41,17 +41,17 @@ class TestFileStorage(unittest.TestCase):
             objects = json.load(json_file)
             self.assertIn(f"BaseModel.{b.id}", objects)
 
-    # def test_reload(self):
-    #     b1 = BaseModel()
-    #     b1.save()
-    #     storage.reload()
+    def test_reload(self):
+        b1 = BaseModel()
+        b1.save()
+        storage.reload()
 
-    #     with open(filename, 'r') as json_file:
-    #         objects = json.load(json_file)
-    #         self.assertIn(f"BaseModel.{b1.id}", objects)
+        with open(filename, 'r') as json_file:
+            objects = json.load(json_file)
+            self.assertIn(f"BaseModel.{b1.id}", objects)
 
-    #     b2 = BaseModel()
-    #     storage.reload()
-    #     with open(filename, 'r') as json_file:
-    #         objects = json.load(json_file)
-    #         self.assertNotIn(f"BaseModel.{b2.id}", objects)
+        b2 = BaseModel()
+        storage.reload()
+        with open(filename, 'r') as json_file:
+            objects = json.load(json_file)
+            self.assertNotIn(f"BaseModel.{b2.id}", objects)
