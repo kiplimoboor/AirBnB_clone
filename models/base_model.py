@@ -4,6 +4,7 @@ This module defines a class Basemodel that defines all common attributes
  and methods from other classes
 """
 
+
 import models
 import uuid
 from datetime import datetime
@@ -12,6 +13,10 @@ from datetime import datetime
 class BaseModel:
     """
     This is the base model of the airbnb clone project.
+    @properties:
+      __init__: initializes the class
+      __str__: returns a formatted string
+      to_dict: returns the dictionary representation of model
     """
 
     def __init__(self, *args, **kwargs):
@@ -53,7 +58,7 @@ class BaseModel:
         """Finds dictionary representaion of mode
 
         Returns:
-            dict: the doctionary respresentation of the model
+            dict: the dictionary respresentation of the model
         """
         dictionary = self.__dict__.copy()
         dictionary['__class__'] = self.__class__.__name__
