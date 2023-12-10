@@ -55,3 +55,7 @@ class TestFileStorage(unittest.TestCase):
         with open(filename, 'r') as json_file:
             objects = json.load(json_file)
             self.assertNotIn(f"BaseModel.{b2.id}", objects)
+
+
+if __name__ == "__main__":
+    unittest.main()
