@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" This is a magic method for the models directory"""
+"""
+This module packages models
+"""
 
 
 from models.engine.file_storage import FileStorage
