@@ -27,10 +27,10 @@ class TestFileStorage(unittest.TestCase):
         if os.path.exists(filename):
             os.remove(filename)
 
-    # def test_all(self):
-    #     b = BaseModel()
-    #     storage.new(b)
-    #     self.assertIn(f"BaseModel.{b.id}", storage.all().keys())
+    def test_all(self):
+        b = BaseModel()
+        storage.new(b)
+        self.assertIn(f"BaseModel.{b.id}", storage.all().keys())
 
     # def test_save(self):
     #     b = BaseModel()
