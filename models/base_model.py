@@ -10,7 +10,7 @@ methods from other classes
 
 @Methods:
   def save: updates the public instance attribute updated_at
-  def to_dict: returns a dictionaary containing keys/values of __dict__ 
+  def to_dict: returns a dictionaary containing keys/values of __dict__
 """
 import models
 from uuid import uuid4
