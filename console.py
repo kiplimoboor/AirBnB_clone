@@ -14,7 +14,9 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-classes = ['Amenity', 'BaseModel', 'City', 'Place', 'Review', 'State', 'User']
+classes = {'Amenity': Amenity, 'BaseModel': BaseModel, 'City': City,
+           'Place': Place, 'Review': Review, 'State': State,
+           'User': User}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -47,10 +49,10 @@ class HBNBCommand(cmd.Cmd):
         """
 
         if is_valid_input(arg):
-            new_model = BaseModel()
-            new_model.save()
+            new_model = classes[arg]()
+            storage.save()
             print(new_model.id)
-            storage.reload()
+            return
 
     def do_show(self, arg):
         """
@@ -66,7 +68,7 @@ class HBNBCommand(cmd.Cmd):
             saved_models = storage.all()
             model = find_model(saved_models, id)
             if model:
-                print(saved_models[model])
+                print(to_str(saved_models[model]))
 
     def do_destroy(self, arg):
         """
@@ -95,9 +97,11 @@ class HBNBCommand(cmd.Cmd):
         if arg:
             if is_valid_input(arg):
                 print(
-                    [f"{saved_models[model]}" for model in saved_models if saved_models[model].__class__.__name__ == arg])
+                    [f"{to_str(saved_models[model])}"
+                     for model in saved_models
+                     if saved_models[model]['__class__'] == arg])
         else:
-            print([f"{saved_models[model]}" for model in saved_models])
+            print([f"{to_str(saved_models[model])}" for model in saved_models])
 
     def do_update(self, arg):
         """
@@ -106,7 +110,8 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = arg.split() if arg else [False]
-        if is_valid_input(args[0], len(args) > 1, len(args) > 2, len(args) > 3):
+        if is_valid_input(args[0], len(args) > 1,
+                          len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
             value = args[3]
@@ -117,24 +122,19 @@ class HBNBCommand(cmd.Cmd):
 
             if model:
                 value = ''.join(x for x in value if x != '"')
-                setattr(saved_models[model], attr, value)
-                updated = saved_models[model]
-                del saved_models[model]
-                storage.save()
-
-                storage.new(updated.to_dict())
+                saved_models[model][attr] = value
                 storage.save()
 
 
 def is_valid_input(arg, id=True, attribute=True, value=True):
     """
-    Checks if class is valid. 
+    Checks if class is valid.
     id is optional
     """
     if not arg:
         print("** class name missing **")
         return False
-    if arg not in classes:
+    if arg not in classes.keys():
         print("** class doesn't exist **")
         return False
     if not id:
@@ -157,6 +157,10 @@ def find_model(models, id):
 
     print("** no instance found **")
     return False
+
+
+def to_str(obj):
+    return str(classes[obj['__class__']](**obj))
 
 
 if __name__ == '__main__':

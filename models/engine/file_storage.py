@@ -29,6 +29,7 @@ class FileStorage:
         """
         sets in __objects the obj with key <obj class name>.id
         """
+
         key = f"{obj['__class__']}.{obj['id']}"
         self.__objects[key] = obj
 
@@ -51,8 +52,6 @@ class FileStorage:
         try:
             filename = self.__file_path
             with open(filename, 'r') as json_file:
-                models = json.load(json_file)
-                self.__objects = {key: classes[key.split('.')[0]](
-                    **value) for key, value in models.items()}
+                self.__objects = json.load(json_file)
         except FileNotFoundError:
             pass
