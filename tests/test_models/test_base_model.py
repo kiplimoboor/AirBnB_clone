@@ -5,6 +5,7 @@ This is a test module for the base_model module
 import os
 import unittest
 from datetime import datetime
+from models import storage
 from models.base_model import BaseModel
 
 filename = "file.json"
@@ -51,6 +52,11 @@ class TestBase(unittest.TestCase):
         self.assertTrue(os.path.exists(filename))
         update_at_save = b1.updated_at
         self.assertNotEqual(update_at_create, update_at_save)
+
+        storage.reload()
+
+        objects = storage.all()
+        self.assertIn(f"BaseModel.{b1.id}", storage.all().keys())
 
     def test_to_dict(self):
         b = BaseModel()
