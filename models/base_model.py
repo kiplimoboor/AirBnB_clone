@@ -38,12 +38,6 @@ class BaseModel:
                     setattr(self, str(key), datetime.fromisoformat(value))
                 else:
                     setattr(self, str(key), value)
-            if 'id' not in kwargs:
-                self.id = str(uuid4())
-            if 'created_at' not in kwargs:
-                self.created_at = datetime.now()
-            if 'updated_at' not in kwargs:
-                self.updated_at = datetime.now()
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
