@@ -9,7 +9,7 @@ from models.base_model import BaseModel
 
 class User(BaseModel):
     """
-    This class updates file storage and console. 
+    This class updates file storage and console.
     @properties:
         email: empty string
         password: empty string
