@@ -13,7 +13,7 @@ methods from other classes
   def to_dict: returns a dictionaary containing keys/values of __dict__ 
 """
 import models
-from uuid import uuid4
+import uuid
 from datetime import datetime
 
 
