@@ -167,7 +167,7 @@ def find_model(models, id):
     """
     for model_key, model_instance in models.items():
         if model_key.split('.')[1] == id:
-            return model_instance
+            return model_key
 
     print("** no instance found **")
     return False
