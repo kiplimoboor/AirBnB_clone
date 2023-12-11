@@ -45,6 +45,10 @@ class HBNBCommand(cmd.Cmd):
             if not len(arg) > 1:
                 return line
             command = re.findall(r'(\w+)\(\)', arg[1])[0]
+            if command:
+                do_name, args = command[0]
+                if do_name == 'show':
+                    return f"show {arg[0]} {args}"
             return f"{command} {arg[0]}"
 
         return line
