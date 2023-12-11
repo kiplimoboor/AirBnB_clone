@@ -164,10 +164,10 @@ def find_model(models, model_class, id):
     """
     Find and return a model instance based on given ID
     """
-    for model_key, model_instance in models.items():
-        model = model_key.split('.')
+    for key, value in models.items():
+        model = key.split('.')
         if model[0] == model_class and model[1] == id:
-            return model_key
+            return key
 
     print("** no instance found **")
     return False
