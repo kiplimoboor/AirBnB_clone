@@ -18,6 +18,11 @@ from models.state import State
 from models.user import User
 
 
+classes = {'BaseModel': BaseModel, 'User': User, 'City': City,
+               'Place': Place, 'Amenity': Amenity, 'Review': Review,
+               'State': State}
+
+
 class HBNBCommand(cmd.Cmd):
     """
     This class defines the HBNB command interpreter.
@@ -28,15 +33,6 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
-    __classes = {
-        'User'
-        'Amenity'
-        'City'
-        'BaseModel'
-        'Place',
-        'State',
-        'Review'
-    }
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
