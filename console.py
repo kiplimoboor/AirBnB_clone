@@ -49,6 +49,8 @@ class HBNBCommand(cmd.Cmd):
                 do_name, args = command[0]
                 if do_name == 'show':
                     return f"show {arg[0]} {args}"
+                elif method_name in ['count', 'all']:
+                    return line
 
         return line
 
