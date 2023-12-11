@@ -5,7 +5,7 @@ It contains the entry pooint of the command intepreter.
 The module defines a class HBNBCommand that interpretes commands given to it.
 """
 import cmd
-import json
+
 import re
 from datetime import datetime
 from models import storage
@@ -57,13 +57,9 @@ class HBNBCommand(cmd.Cmd):
         """
 
         if is_valid_input(arg):
-            if arg in classes:
-                new_model = classes[arg]()
-                storage.save()
-                print(new_model.id)
-            else:
-                print("** class doesn't exist **")
-            return
+            new_model = classes[arg]()
+            storage.save()
+            print(new_model.id)
 
     def do_show(self, arg):
         """
@@ -76,7 +72,7 @@ class HBNBCommand(cmd.Cmd):
             id = args[1]
 
             saved_models = storage.all()
-            model = find_model(saved_models, id)
+            model = find_model(saved_models, args[0], id)
             if model:
                 print(saved_models[model])
 
@@ -91,12 +87,10 @@ class HBNBCommand(cmd.Cmd):
             id = args[1]
 
             saved_models = storage.all()
-            model = find_model(saved_models, id)
+            model = find_model(saved_models, args[0], id)
             if model:
                 del saved_models[model]
                 storage.save()
-            else:
-                print("** no instance found **")
 
     def do_all(slef, arg):
         """
@@ -126,7 +120,12 @@ class HBNBCommand(cmd.Cmd):
                           len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
-            value = args[3].strip('\"')
+            value = args[3]
+            if value[0] == '"':
+                value = re.findall(r'\"(.*?)\"', value)
+                value = value[0] if value else []
+            else:
+                value = value.split()[0]
 
             saved_models = storage.all()
 
@@ -161,12 +160,13 @@ def is_valid_input(arg, id=True, attribute=True, value=True):
     return True
 
 
-def find_model(models, id):
+def find_model(models, model_class, id):
     """
     Find and return a model instance based on given ID
     """
     for model_key, model_instance in models.items():
-        if model_key.split('.')[1] == id:
+        model = model_key.split('.')
+        if model[0] == model_class and model[1] == id:
             return model_key
 
     print("** no instance found **")

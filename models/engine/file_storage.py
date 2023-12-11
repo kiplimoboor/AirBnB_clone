@@ -51,28 +51,28 @@ class FileStorage:
         """
         serializes __objects to the JSON file (path: __file_path)
         """
-        serialized_objects = {}
-        for key, obj in FileStorage.__objects.items():
-            serialized_objects[key]
+        filename = self.__file_path
+        with open(filename, 'w') as json_file:
 
-        with open(FileStorage.__filepath, 'w') as json_file:
-            json.dump(serialized_objects, file)
+            json_dict = {}
+
+            for key, value in self.__objects.items():
+                json_dict[key] = value.to_dict()
+
+            json.dump(json_dict, json_file)
 
     def reload(self):
         """
         deserializes the JSON file to __objects
         """
-        filename = FileStorage.__file_path
-
-        try:
-            with open(filename, 'r') as json_file:
-                models_data = json.load(json_file)
-                for key, value in models_data.items():
-                    class_name, obj_id = key.split('.')
-                    class_obj = eval(class_name)
-                        instance = class_obj(**value)
-                        FileStorage.__objects[key] = instance
-        except FileNotFoundError:
-            pass
-        except json.JSONDecodeError:
-            pass
+        for key, value in models_data.items():
+            class_name = key.split('.')[0]
+                if class_name not in classes:
+                    self.__objects = {}
+                    return
+                instance = classes[class_name](**value)
+                self.__objects[key] = instance
+    except FileNotFoundError:
+        pass
+    except json.JSONDecodeError:
+        pass
