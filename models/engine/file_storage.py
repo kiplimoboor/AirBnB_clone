@@ -53,13 +53,8 @@ class FileStorage:
         """
         filename = self.__file_path
         with open(filename, 'w') as json_file:
-
-            json_dict = {}
-
-            for key, value in self.__objects.items():
-                json_dict[key] = value.to_dict()
-
-            json.dump(json_dict, json_file)
+            json.dump({key: value.to_dict()
+                       for key, value in self.__objects.items()}, json_file)
 
     def reload(self):
         """
@@ -73,14 +68,14 @@ class FileStorage:
         try:
             with open(filename, 'r') as json_file:
                 models_data = json.load(json_file)
+                self.__objects = {}
 
                 for key, value in models_data.items():
                     class_name = key.split('.')[0]
-                    if class_name not in classes:
-                        self.__objects = {}
-                        return
-                    instance = classes[class_name](**value)
-                    self.__objects[key] = instance
+
+                    if class_name in classes:
+                        instance = classes[class_name](**value)
+                        self.__objects[key] = instance
         except FileNotFoundError:
             pass
         except json.JSONDecodeError:
