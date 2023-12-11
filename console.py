@@ -150,6 +150,21 @@ class HBNBCommand(cmd.Cmd):
                 setattr(saved_models[model], attr, value)
                 storage.save()
 
+    def do_count(self, arg):
+        """
+        Retrieves the number of instances of a class
+        """
+
+        saved_models = storage.all()
+        count = 0
+
+        if arg:
+            if is_valid_input(arg):
+                for model in saved_models:
+                    if type(saved_models[model]).__name__ == arg:
+                        count += 1
+                print(count)
+
 
 def is_valid_input(arg, id=True, attribute=True, value=True):
     """
