@@ -68,14 +68,14 @@ class FileStorage:
         try:
             with open(filename, 'r') as json_file:
                 models_data = json.load(json_file)
-                self.__objects = {}
 
                 for key, value in models_data.items():
                     class_name = key.split('.')[0]
-
-                    if class_name in classes:
-                        instance = classes[class_name](**value)
-                        self.__objects[key] = instance
+                    if class_name not in classes:
+                        self.__objects = {}
+                        return
+                    instance = classes[class_name](**value)
+                    self.__objects[key] = instance
         except FileNotFoundError:
             pass
         except json.JSONDecodeError:
