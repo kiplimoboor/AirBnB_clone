@@ -129,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
 
             saved_models = storage.all()
 
-            model = find_model(saved_models, id)
+            model = find_model(saved_models, args[0], id)
 
             if model:
                 setattr(saved_models[model], attr, value)
