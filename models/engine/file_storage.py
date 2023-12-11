@@ -38,44 +38,40 @@ class FileStorage:
         """
         Returns the dictionary __objects
         """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """
         sets in __objects the obj with key <obj class name>.id
         """
         key = f"{type(obj).__name__}.{obj.id}"
-        self.__objects[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """
         serializes __objects to the JSON file (path: __file_path)
         """
-        filename = self.__file_path
-        with open(filename, 'w') as json_file:
-            json.dump({key: value.to_dict()
-                       for key, value in self.__objects.items()}, json_file)
+        serialized_objects = {}
+        for key, obj in FileStorage.__objects.items():
+            serialized_objects[key]
+
+        with open(FileStorage.__filepath, 'w') as json_file:
+            json.dump(serialized_objects, file)
 
     def reload(self):
         """
         deserializes the JSON file to __objects
         """
-        classes = {'Amenity': Amenity, 'BaseModel': BaseModel, 'City': City,
-                   'Place': Place, 'Review': Review, 'State': State,
-                   'User': User}
-        filename = self.__file_path
+        filename = FileStorage.__file_path
 
         try:
             with open(filename, 'r') as json_file:
                 models_data = json.load(json_file)
-                self.__objects = {}
-
                 for key, value in models_data.items():
-                    class_name = key.split('.')[0]
-
-                    if class_name in classes:
-                        instance = classes[class_name](**value)
-                        self.__objects[key] = instance
+                    class_name, obj_id = key.split('.')
+                    class_obj = eval(class_name)
+                        instance = class_obj(**value)
+                        FileStorage.__objects[key] = instance
         except FileNotFoundError:
             pass
         except json.JSONDecodeError:
