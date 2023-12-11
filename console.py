@@ -145,7 +145,7 @@ def is_valid_input(arg, id=True, attribute=True, value=True):
         print("** class doesn't exist **")
         return False
     if not id:
-        print(" ** instance id missing **")
+        print("** instance id missing **")
         return False
     if not attribute:
         print("** attribute name missing **")
