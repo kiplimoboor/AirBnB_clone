@@ -45,6 +45,10 @@ class TestFileStorage(unittest.TestCase):
         objects = storage.all()
         self.assertIn(f"BaseModel.{b.id}", storage.all().keys())
 
+        b1 = BaseModel()
+        storage.reload()
+        self.assertNotIn(f"BaseModel.{b1.id}", storage.all().keys())
+
 
 if __name__ == "__main__":
     unittest.main()
