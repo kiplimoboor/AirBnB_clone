@@ -5,7 +5,7 @@ It contains the entry pooint of the command intepreter.
 The module defines a class HBNBCommand that interpretes commands given to it.
 """
 import cmd
-import json
+
 import re
 from datetime import datetime
 from models import storage
@@ -57,13 +57,9 @@ class HBNBCommand(cmd.Cmd):
         """
 
         if is_valid_input(arg):
-            if arg in classes:
-                new_model = classes[arg]()
-                storage.save()
-                print(new_model.id)
-            else:
-                print("** class doesn't exist **")
-            return
+            new_model = classes[arg]()
+            storage.save()
+            print(new_model.id)
 
     def do_show(self, arg):
         """
@@ -95,8 +91,6 @@ class HBNBCommand(cmd.Cmd):
             if model:
                 del saved_models[model]
                 storage.save()
-            else:
-                print("** no instance found **")
 
     def do_all(slef, arg):
         """
