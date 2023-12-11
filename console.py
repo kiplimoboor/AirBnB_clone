@@ -6,6 +6,7 @@ The module defines a class HBNBCommand that interpretes commands given to it.
 """
 import cmd
 
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.amenity import Amenity
@@ -118,7 +119,12 @@ class HBNBCommand(cmd.Cmd):
                           len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
-            value = args[3].split()[0].strip('\"')
+            value = args[3]
+            if value[0] == '"':
+                value = re.findall(r'\"(.*?)\"', value)
+                value = value[0] if value else []
+            else:
+                value = args[3].split()[0]
             print(value)
 
             saved_models = storage.all()
