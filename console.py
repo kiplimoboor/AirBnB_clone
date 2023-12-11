@@ -57,9 +57,12 @@ class HBNBCommand(cmd.Cmd):
         """
 
         if is_valid_input(arg):
-            new_model = classes[arg]()
-            storage.save()
-            print(new_model.id)
+            if arg in classes:
+                new_model = classes[arg]()
+                storage.save()
+                print(new_model.id)
+            else:
+                print("** class doesn't exist **")
             return
 
     def do_show(self, arg):
