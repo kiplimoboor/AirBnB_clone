@@ -4,8 +4,6 @@ This module containes the CLI implementation for the project.
 It contains the entry pooint of the command intepreter.
 The module defines a class HBNBCommand that interpretes commands given to it.
 """
-
-
 import cmd
 import json
 import re
@@ -20,11 +18,6 @@ from models.state import State
 from models.user import User
 
 
-classes = {'Amenity': Amenity, 'BaseModel': BaseModel, 'City': City,
-           'Place': Place, 'Review': Review, 'State': State,
-           'User': User}
-
-
 class HBNBCommand(cmd.Cmd):
     """
     This class defines the HBNB command interpreter.
@@ -35,6 +28,9 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
+    classes = {'User': User, 'Amenity': Amenity, 'City': City,
+                'BaseModel': BaseModel, 'Place': Place,
+                'State': State, 'Review': Review }
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
