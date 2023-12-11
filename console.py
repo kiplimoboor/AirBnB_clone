@@ -19,7 +19,7 @@ from models.user import User
 
 
 classes = {'BaseModel': BaseModel, 'User': User, 'City': City,
-           'Place': Place, 'Amenity': Amenity, 'Review': Review
+           'Place': Place, 'Amenity': Amenity, 'Review': Review,
            'State': State}
 
 
