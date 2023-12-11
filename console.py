@@ -92,7 +92,7 @@ class HBNBCommand(cmd.Cmd):
                 del saved_models[model]
                 storage.save()
 
-    def do_all(slef, arg):
+    def do_all(self, arg):
         """
         Usage: all BaseModel or all
         Prins all string representation of all instances
