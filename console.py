@@ -151,7 +151,7 @@ def is_valid_input(arg, id=True, attribute=True, value=True):
         print("** attribute name missing **")
         return False
     if not value:
-        print("value missing")
+        print("** value missing **")
         return False
 
     return True
