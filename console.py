@@ -19,7 +19,7 @@ from models.user import User
 
 
 classes = {'BaseModel': BaseModel, 'User': User, 'City': City,
-           'Place': Place, 'Amenity': Amenity, 'Review': Review,
+           'Place': Place, 'Amenity': Amenity, 'Review': Review
            'State': State}
 
 
@@ -71,7 +71,6 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance based
         on the class name and id
         """
-
         args = arg.split() if arg else [False]
         if is_valid_input(args[0], len(args) == 2):
             id = args[1]
@@ -84,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """
         Usage: destroy BaseModel model-id
-        Deletes an instance based on the class name an id
+        Deletes an instance based on the class name and id
         """
 
         args = arg.split() if arg else [False]
@@ -96,6 +95,8 @@ class HBNBCommand(cmd.Cmd):
             if model:
                 del saved_models[model]
                 storage.save()
+            else:
+                print("** no instance found **")
 
     def do_all(slef, arg):
         """
@@ -164,9 +165,9 @@ def find_model(models, id):
     """
     Find and return a model instance based on given ID
     """
-    for model in models:
-        if model.split('.')[1] == id:
-            return model
+    for model_key, model_instance in models.items():
+        if model_key.split('.')[1] == id:
+            return model_key
 
     print("** no instance found **")
     return False
