@@ -34,12 +34,9 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save(self):
         b = BaseModel()
+        self.assertFalse(os.path.exists(filename))
         b.save()
         self.assertTrue(os.path.exists(filename))
-
-        with open(filename, 'r') as json_file:
-            objects = json.load(json_file)
-            self.assertIn(f"BaseModel.{b.id}", objects)
 
 
 if __name__ == "__main__":

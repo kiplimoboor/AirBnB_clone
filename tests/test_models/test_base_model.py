@@ -2,16 +2,26 @@
 This is a test module for the base_model module
 """
 
+import os
 import unittest
-import time
 from datetime import datetime
 from models.base_model import BaseModel
+
+filename = "file.json"
 
 
 class TestBase(unittest.TestCase):
     """
     Test Cases for BaseModel
     """
+
+    def setUp(self):
+        if os.path.exists(filename):
+            os.remove(filename)
+
+    def tearDown(self):
+        if os.path.exists(filename):
+            os.remove(filename)
 
     def test_base_init(self):
         b1 = BaseModel()
@@ -36,7 +46,9 @@ class TestBase(unittest.TestCase):
         update_at_create = b1.updated_at
         b1.name = "My First Model"
         b1.my_number = 89
+        self.assertFalse(os.path.exists(filename))
         b1.save()
+        self.assertTrue(os.path.exists(filename))
         update_at_save = b1.updated_at
         self.assertNotEqual(update_at_create, update_at_save)
 
