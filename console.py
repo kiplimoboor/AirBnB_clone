@@ -34,6 +34,21 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
+    def precmd(self, line):
+
+        if line == '':
+            return ''
+        elif line.lower() == 'EOF':
+            raise SystemExit
+        else:
+            arg = line.split()[0].split('.')
+            if not len(arg) > 1:
+                return line
+            command = re.findall(r'(\w+)\(\)', arg[1])[0]
+            return f"{command} {arg[0]}"
+
+        return line
+
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
         return True
