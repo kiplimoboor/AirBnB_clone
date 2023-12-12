@@ -44,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
             arg = line.split()[0].split('.')
             if not len(arg) > 1:
                 return line
-            command = re.findall(r'(\w+)\(\)', arg[1])[0]
+            command = re.findall(r'(\w+)\((.*?)\)', arg[1])[0]
             return f"{command} {arg[0]}"
 
         return line
