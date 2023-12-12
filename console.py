@@ -40,23 +40,26 @@ class HBNBCommand(cmd.Cmd):
             return ''
         elif line.lower() == 'EOF':
             raise SystemExit
-        else:
-            line = line.strip()
-            args = line.split()
-            if args:
-                if not len(args[0].split('.')) > 1:
-                    return line
 
-                commands = re.findall(r'(\w+)\.(\w+)\((.*)\)', args[0])[0]
-                if not commands:
-                    return line
+        pattern = re.compile(r'(\w+)\.(\w+)\((.*?)\)')
+        match = pattern.match(line)
 
-                command = commands[1]
-                class_name = commands[0]
-                id = commands[2].strip('\"')
-                return f"{command} {class_name} {id}"
+        if not match:
+            return line
+        args = match.groups()
+        class_name = args[0]
+        command = args[1]
+        vars = args[2].split(',')
 
-        return line
+        prompt = f"{command} {class_name}"
+
+        i = 0
+        for var in vars:
+            var = var.strip().strip('/"')
+            prompt += f" {var}"
+            i += 1
+
+        return prompt
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
@@ -139,17 +142,19 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id
         """
 
-        args = arg.split(maxsplit=4) if arg else [False]
+        args = arg.split(maxsplit=3) if arg else [False]
         if is_valid_input(args[0], len(args) > 1,
                           len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
             value = args[3]
-
+            if value[0] == '"':
+                value = re.findall(r'\"(.*?)\"', value)
+                value = value[0] if value else []
+            else:
+                value = value.split()[0]
             saved_models = storage.all()
-
             model = find_model(saved_models, args[0], id)
-
             if model:
                 setattr(saved_models[model], attr, value)
                 storage.save()
