@@ -130,7 +130,7 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id
         """
 
-        args = arg.split(maxsplit=3) if arg else [False]
+        args = arg.split(maxsplit=4) if arg else [False]
         if is_valid_input(args[0], len(args) > 1,
                           len(args) > 2, len(args) > 3):
             id = args[1]
