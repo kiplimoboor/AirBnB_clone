@@ -136,11 +136,6 @@ class HBNBCommand(cmd.Cmd):
             id = args[1]
             attr = args[2]
             value = args[3]
-            if value[0] == '"':
-                value = re.findall(r'\"(.*?)\"', value)
-                value = value[0] if value else []
-            else:
-                value = value.split()[0]
 
             saved_models = storage.all()
 
