@@ -41,11 +41,20 @@ class HBNBCommand(cmd.Cmd):
         elif line.lower() == 'EOF':
             raise SystemExit
         else:
-            arg = line.split()[0].split('.')
-            if not len(arg) > 1:
-                return line
-            command = re.findall(r'(\w+)\((.*?)\)', arg[1])[0]
-            return f"{command[0]} {arg[0]} {command[1]}"
+            line = line.strip()
+            args = line.split()
+            if args:
+                if not len(args[0].split('.')) > 1:
+                    return line
+
+                commands = re.findall(r'(\w+)\.(\w+)\((.*)\)', args[0])[0]
+                if not commands:
+                    return line
+
+                command = commands[1]
+                class_name = commands[0]
+                id = commands[2].strip('\"')
+                return f"{command} {class_name} {id}"
 
         return line
 
