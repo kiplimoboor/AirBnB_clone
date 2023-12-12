@@ -40,14 +40,22 @@ class HBNBCommand(cmd.Cmd):
             return ''
         elif line.lower() == 'EOF':
             raise SystemExit
-        else:
-            arg = line.split()[0].split('.')
-            if not len(arg) > 1:
-                return line
-            command = re.findall(r'(\w+)\((.*?)\)', arg[1])[0]
-            return f"{command[0]} {arg[0]} {command[1]}"
 
-        return line
+        pattern = re.compile(r'(\w+)\.(\w+)\((.*?)\)')
+        match = pattern.match(line)
+
+        if not match:
+            return line
+        args = match.groups()
+        vars = args[2].split(',')
+
+        prompt = f"{args[1]} {args[0]}"
+
+        for var in vars:
+            var = var.strip().strip('/"')
+            prompt += f" {var}"
+
+        return prompt
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
@@ -130,27 +138,21 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id
         """
 
-        args = arg.split(maxsplit=4) if arg else [False]
+        args = arg.split(maxsplit=3) if arg else [False]
         if is_valid_input(args[0], len(args) > 1,
                           len(args) > 2, len(args) > 3):
             id = args[1]
             attr = args[2]
             value = args[3]
 
-            if len(args) > 4:
-                value = args[4]
-        
             if value[0] == '"':
                 value = re.findall(r'\"(.*?)\"', value)
                 value = value[0] if value else []
             else:
                 value = value.split()[0]
 
-
             saved_models = storage.all()
-
             model = find_model(saved_models, args[0], id)
-
             if model:
                 setattr(saved_models[model], attr, value)
                 storage.save()
