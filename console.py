@@ -47,7 +47,9 @@ class HBNBCommand(cmd.Cmd):
             command = re.findall(r'(\w+)\(([^)]+)\)', arg[1])
             if command:
                 method_name, args = command[0]
-                if method_name == 'show':
+                if method_name in ['count', 'all']:
+                    return line
+                elif method_name == 'show':
                     return f"show {arg[0]} {args}"
             return f"{command} {arg[0]}"
 
