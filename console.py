@@ -47,17 +47,13 @@ class HBNBCommand(cmd.Cmd):
         if not match:
             return line
         args = match.groups()
-        class_name = args[0]
-        command = args[1]
         vars = args[2].split(',')
 
-        prompt = f"{command} {class_name}"
+        prompt = f"{args[1]} {args[0]}"
 
-        i = 0
         for var in vars:
             var = var.strip().strip('/"')
             prompt += f" {var}"
-            i += 1
 
         return prompt
 
