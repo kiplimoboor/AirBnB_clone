@@ -44,11 +44,8 @@ class HBNBCommand(cmd.Cmd):
             arg = line.split()[0].split('.')
             if not len(arg) > 1:
                 return line
-            command = re.findall(r'(\w+)\(\)', arg[1])
-            if command:
-                method_name, args = command[0]
-                if method_name in ['count', 'all', 'show']:
-                    return f"{method_name} {arg[0]} {args}"
+            command = re.findall(r'(\w+)\(\)', arg[1])[0]
+                    return f"{command} {arg[0]}"
 
         return line
 
