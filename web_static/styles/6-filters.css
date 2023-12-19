@@ -29,6 +29,11 @@
 .filters .amenities {
   height: 100%;
   width: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  flex-wrap: wrap;
 }
 
 .filters div:first-of-type {
@@ -43,26 +48,30 @@
 
 .filters h3 {
   font-weight: 600;
-  margin: 12px 0 5px 0;
+  margin: 0;
   padding-left: 30px;
 }
 
 .filters h4 {
   font-weight: 400;
   font-size: 14px;
-  margin: 0 0 18px 0;
+  margin: 0;
   padding-left: 30px;
 }
 
 .filters .popover {
   display: none;
-  position: relative;
+  position: absolute;
+  top: 100%;
   background-color: #fafafa;
-  width: auto;
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid #dddddd;
   border-radius: 4px;
+  margin: 0;
   padding: 15px;
   z-index: 1;
+
 }
 
 .filters li {
